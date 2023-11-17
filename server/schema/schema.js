@@ -1,5 +1,10 @@
 
-const {projects, clients} = require('../sampleData.js')
+// const {projects, clients} = require('../sampleData.js')
+
+// mongoose models 
+
+const Project = require('../models/Project.js') 
+const Client = require('../models/Client.js') 
 
 const {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList} = require('graphql')
 
@@ -29,7 +34,8 @@ const ProjectType = new GraphQLObjectType({
             type: ClientType,
             // the parent refers to the project Type 
             resolve(parent, args) {
-                return clients.find(client => client.id === parent.clientId)
+                // return clients.find(client => client.id === parent.clientId)
+                return Client.findById(parent.clientId);
             }
         }
     })
@@ -44,7 +50,8 @@ const RootQuery = new GraphQLObjectType({
         projects: {
             type: new GraphQLList(ProjectType),
             resolve(parent, args) {
-                return projects
+                // return projects
+                return Project.find();
             }
         },
 
@@ -56,7 +63,8 @@ const RootQuery = new GraphQLObjectType({
                 id: {type: GraphQLID}
             },
             resolve(parent, args) {
-                return projects.find(project => project.id === args.id)
+                // return projects.find(project => project.id === args.id)
+                return Project.findById(args.id)
             }
         },
 
@@ -65,7 +73,8 @@ const RootQuery = new GraphQLObjectType({
         clients: {
             type: new GraphQLList(ClientType),
             resolve(parent, args) {
-                return clients;
+                // return clients;
+                return Client.find();
             }
 
         },
@@ -79,7 +88,8 @@ const RootQuery = new GraphQLObjectType({
                 id: {type: GraphQLID } 
             },
             resolve(parent, args) {
-                return clients.find(client => client.id === parent.id) 
+                // return clients.find(client => client.id === parent.id) 
+                return Client.findById(args.id)
             }
         }  
     }
